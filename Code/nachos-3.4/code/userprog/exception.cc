@@ -52,12 +52,75 @@ void
 ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
+	int op1, op2, result;
+	int size;
+	char s[200];
+	char* s2;
+	int a;
 
-    if ((which == SyscallException) && (type == SC_Halt)) {
-	DEBUG('a', "Shutdown, initiated by user program.\n");
-   	interrupt->Halt();
-    } else {
-	printf("Unexpected user mode exception %d %d\n", which, type);
-	ASSERT(FALSE);
-    }
+	switch (which)
+	{
+		case NoException: 
+			return;
+
+		case PageFaultException:
+		{
+			cout << "No valid translation found." << endl;
+			interrupt->Halt();
+			break;
+		}
+
+		case ReadOnlyException:
+		{
+			cout << "Write attempted to page marked 'read-only'" << endl;
+			interrupt->Halt();
+			break;
+		}
+		case BusErrorException:
+		{
+			cout << "Translation resulted in an invalid physical address." << endl;
+			interrupt->Halt();
+			break;
+		}
+		case AddressErrorException:
+		{
+			cout << "Unaligned reference or one that was beyond the end of the address space" << endl;
+			interrupt->Halt();
+			break;
+		}
+		case OverflowException:
+		{
+			cout << "Integer overflow in add or sub." << endl;
+			interrupt->Halt();
+			break;
+		}
+		case IllegalInstrException:
+		{
+			cout << "Unimplemented or reserved instr." << endl;
+			interrupt->Halt();
+			break;
+		}
+		case NumExceptionTypes:
+		{
+			cout << "Number Exception types." << endl;
+			interrupt->Halt();
+			break;
+		}
+		case SycallException:
+		{
+			switch (type)
+			{
+				case SC_Halt;
+				{
+					DEBUG('a', "Shutdown, initiated by user program. \n);
+					interrupt->Halt();
+					break;
+				}
+			}
+		}
+		default:
+			cout << "Unexpected user mode exception " << which << ", " << type << endl;
+			break;
+	}
+    
 }
