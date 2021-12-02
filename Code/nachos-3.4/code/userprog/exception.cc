@@ -65,44 +65,44 @@ ExceptionHandler(ExceptionType which)
 
 		case PageFaultException:
 		{
-			cout << "No valid translation found." << endl;
+			printf("No valid translation found \n");
 			interrupt->Halt();
 			break;
 		}
 
 		case ReadOnlyException:
 		{
-			cout << "Write attempted to page marked 'read-only'" << endl;
+			printf("\n\n Write attempted to page marked 'read-only' \n");;
 			interrupt->Halt();
 			break;
 		}
 		case BusErrorException:
 		{
-			cout << "Translation resulted in an invalid physical address." << endl;
+			printf("\n\n Translation resulted invalid physical address. \n");
 			interrupt->Halt();
 			break;
 		}
 		case AddressErrorException:
 		{
-			cout << "Unaligned reference or one that was beyond the end of the address space" << endl;
+			printf("\n\n Unaligned reference or one that was beyond the end of the address space. \n");
 			interrupt->Halt();
 			break;
 		}
 		case OverflowException:
 		{
-			cout << "Integer overflow in add or sub." << endl;
+			printf("\n\n Integer overflow in add or sub. \n");
 			interrupt->Halt();
 			break;
 		}
 		case IllegalInstrException:
 		{
-			cout << "Unimplemented or reserved instr." << endl;
+			printf("\n\n Unimplemented or reserved instr. \n");
 			interrupt->Halt();
 			break;
 		}
 		case NumExceptionTypes:
 		{
-			cout << "Number Exception types." << endl;
+			printf("\n\n Number exception types. \n");
 			interrupt->Halt();
 			break;
 		}
@@ -119,7 +119,7 @@ ExceptionHandler(ExceptionType which)
 			}
 		}
 		default:
-			cout << "Unexpected user mode exception " << which << ", " << type << endl;
+			printf("Unexpected user mode exception %d %d \n", which, type);
 			break;
 	}
     
