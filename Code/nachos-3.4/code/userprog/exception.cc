@@ -48,6 +48,28 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
+// Doi thanh ghi Program counter cua he thong ve sau 4 byte de tiep tuc nap lenh
+void IncreasePC()
+{
+	// trong machine/machine.h -- Ham int ReadRegister(int num) doc thanh ghi thu 'num'
+	// bien counter doc dia chi PCReg (hien tai)
+	int counter = machine->ReadRegister(PCReg); 
+
+	// viet gia tri nay vao thanh ghi trc do
+	// trong machine/machine.h -- Ham void WriteRegister(int num, int value) ghi 'value' vao thanh ghi thu 'num'
+	machine->WriteRegister(PrevPCReg, counter); 
+
+	// tiep tuc doc gia tri thanh ghi ke tiep va gan vao thanh ghi hien tai
+	counter = machine->ReadRegister(NextPCReg);
+	machine->WriteRegister(PCReg, counter);
+	
+	// viet dia chi cau lenh ke tiep
+	machine->WriteRegister(NextPCReg, counter + 4);
+
+	// Thay IncreasePC vao Halt Systemcall
+}
+
+// bien which la loai Exception
 void
 ExceptionHandler(ExceptionType which)
 {
