@@ -50,28 +50,6 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
-// Doi thanh ghi Program counter cua he thong ve sau 4 byte de tiep tuc nap lenh
-void IncreasePC()
-{
-	// trong machine/machine.h -- Ham int ReadRegister(int num) doc thanh ghi thu 'num'
-	// bien counter doc dia chi PCReg (hien tai)
-	int counter = machine->ReadRegister(PCReg); 
-
-	// viet gia tri nay vao thanh ghi truoc do
-	// trong machine/machine.h -- Ham void WriteRegister(int num, int value) ghi 'value' vao thanh ghi thu 'num'
-	machine->WriteRegister(PrevPCReg, counter); 
-
-	// tiep tuc doc gia tri thanh ghi ke tiep va gan vao thanh ghi hien tai
-	counter = machine->ReadRegister(NextPCReg);
-	machine->WriteRegister(PCReg, counter);
-	
-	// viet dia chi cau lenh ke tiep
-	machine->WriteRegister(NextPCReg, counter + 4);
-
-	// Thay IncreasePC vao Halt Systemcall
-}
-
-
 char* User2System(int virtAddr, int limit)
 {
 	int i; //chi so index
@@ -111,19 +89,37 @@ int System2User(int virtAddr, int len, char* buffer)
 	return i;
 }
 
+// Doi thanh ghi Program counter cua he thong ve sau 4 byte de tiep tuc nap lenh
+void IncreasePC()
+{
+	// trong machine/machine.h -- Ham int ReadRegister(int num) doc thanh ghi thu 'num'
+	// bien counter doc dia chi PCReg (hien tai)
+	int counter = machine->ReadRegister(PCReg); 
 
+	// viet gia tri nay vao thanh ghi truoc do
+	// trong machine/machine.h -- Ham void WriteRegister(int num, int value) ghi 'value' vao thanh ghi thu 'num'
+	machine->WriteRegister(PrevPCReg, counter); 
 
+	// tiep tuc doc gia tri thanh ghi ke tiep va gan vao thanh ghi hien tai
+	counter = machine->ReadRegister(NextPCReg);
+	machine->WriteRegister(PCReg, counter);
+	
+	// viet dia chi cau lenh ke tiep
+	machine->WriteRegister(NextPCReg, counter + 4);
+
+	// Thay IncreasePC vao Halt Systemcall
+}
 
 // bien which la loai Exception
 void
 ExceptionHandler(ExceptionType which)
 {
-    int type = machine->ReadRegister(2);
-	int op1, op2, result;
-	int size;
-	char s[200];
-	char* s2;
-	int a;
+    	int type = machine->ReadRegister(2);
+	//int op1, op2, result;
+	//int size;
+	//char s[200];
+	//char* s2;
+	//int a;
 
 
 	char* buffer;
@@ -186,14 +182,14 @@ ExceptionHandler(ExceptionType which)
 			interrupt->Halt();
 			break;
 		}
-		case SycallException:
+		case SyscallException:
 		{
 			switch (type)
 			{
 			
 			    case SC_Halt:
 				{
-					DEBUG('a', "Shutdown, initiated by user program. \n);
+					//DEBUG('a', "Shutdown, initiated by user program. \n);
 					interrupt->Halt();
 					break;
 				}
@@ -250,7 +246,7 @@ ExceptionHandler(ExceptionType which)
 								if (buffer[j] != '0')
 								{
 									printf("\n\n Gia tri nhap vao khong phai la so nguyen");
-									DEBUG('a', "\n Gia tri nhap vao khong phai la so nguyen");
+									//DEBUG('a', "\n Gia tri nhap vao khong phai la so nguyen");
 									machine->WriteRegister(2, 0);
 									IncreasePC();
 									delete buffer;
@@ -268,7 +264,7 @@ ExceptionHandler(ExceptionType which)
 						else if (buffer[i] < '0' && buffer[i] > '9')
 						{
 							printf("\n\n Gia tri nhap vao khong phai la so nguyen");
-							DEBUG('a', "\n Gia tri nhap vao khong phai la so nguyen");
+							//DEBUG('a', "\n Gia tri nhap vao khong phai la so nguyen");
 							machine->WriteRegister(2, 0);
 							IncreasePC();
 							delete buffer;
@@ -412,7 +408,7 @@ ExceptionHandler(ExceptionType which)
 					if (numbytes > 1) 
 					{
 						printf("Gia tri nhap vao chi co the la 1 ki tu!");
-						DEBUG('a', "\n Gia tri nhap vao chi co the la 1 ki tu!");
+						//DEBUG('a', "\n Gia tri nhap vao chi co the la 1 ki tu!");
 						machine->WriteRegister(2, 0);
 						IncreasePC();
 						return;
@@ -423,7 +419,7 @@ ExceptionHandler(ExceptionType which)
 					else if (numbytes == 0) 
 					{
 						printf("Gia tri nhap vao la rong!");
-						DEBUG('a', "\n Ky tu rong!");
+						//DEBUG('a', "\n Ky tu rong!");
 						
 						machine->WriteRegister(2, 0);
 						IncreasePC();
@@ -453,7 +449,7 @@ ExceptionHandler(ExceptionType which)
 					c = (char)machine->ReadRegister(4);
 					// Ta su dung ham Write(&c,1) de in ra 1 ki tu c ra man hinh
 					gSynchConsole->Write(&c, 1);
-					//IncreasePC();
+					IncreasePC();
 					break;
 
 				}

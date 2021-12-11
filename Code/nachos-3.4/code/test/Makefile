@@ -35,7 +35,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort ReadInt PrintInt ReadChar PrintChar ReadString PrintString
+all: halt shell matmult sort help ascii mysort
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -66,39 +66,27 @@ matmult: matmult.o start.o
 	$(LD) $(LDFLAGS) start.o matmult.o -o matmult.coff
 	../bin/coff2noff matmult.coff matmult
 
+demo.o: demo.c
+	$(CC) $(CFLAGS) -c demo.c
+demo: demo.o start.o
+	$(LD) $(LDFLAGS) start.o demo.o -o demo.coff
+	../bin/coff2noff demo.coff demo
 
-ReadInt.o: ReadInt.c
-	$(CC) $(CFLAGS) -c ReadInt.c
-ReadInt: ReadInt.o start.o
-	$(LD) $(LDFLAGS) start.o ReadInt.o -o ReadInt.coff
-	../bin/coff2noff ReadInt.coff ReadInt
+ascii.o: ascii.c
+	$(CC) $(CFLAGS) -c ascii.c
+ascii: ascii.o start.o
+	$(LD) $(LDFLAGS) start.o ascii.o -o ascii.coff
+	../bin/coff2noff ascii.coff ascii
 
-PrintInt.o: PrintInt.c
-	$(CC) $(CFLAGS) -c PrintInt.c
-PrintInt: PrintInt.o start.o
-	$(LD) $(LDFLAGS) start.o PrintInt.o -o PrintInt.coff
-	../bin/coff2noff PrintInt.coff PrintInt
+help.o: help.c
+	$(CC) $(CFLAGS) -c help.c
+help: help.o start.o
+	$(LD) $(LDFLAGS) start.o help.o -o help.coff
+	../bin/coff2noff help.coff help
 
-ReadChar.o: ReadChar.c
-	$(CC) $(CFLAGS) -c ReadChar.c
-ReadChar: ReadChar.o start.o
-	$(LD) $(LDFLAGS) start.o ReadChar.o -o ReadChar.coff
-	../bin/coff2noff ReadChar.coff ReadChar
+mysort.o: mysort.c
+	$(CC) $(CFLAGS) -c mysort.c
+mysort: mysort.o start.o
+	$(LD) $(LDFLAGS) start.o mysort.o -o mysort.coff
+	../bin/coff2noff mysort.coff mysort
 
-PrintChar.o: PrintChar.c
-	$(CC) $(CFLAGS) -c PrintChar.c
-PrintChar: PrintChar.o start.o
-	$(LD) $(LDFLAGS) start.o PrintChar.o -o PrintChar.coff
-	../bin/coff2noff PrintChar.coff PrintChar
-
-ReadString.o: ReadString.c
-	$(CC) $(CFLAGS) -c ReadString.c
-ReadString: ReadString.o start.o
-	$(LD) $(LDFLAGS) start.o ReadString.o -o ReadString.coff
-	../bin/coff2noff ReadString.coff ReadString
-
-PrintString.o: PrintString.c
-	$(CC) $(CFLAGS) -c PrintString.c
-PrintString: PrintString.o start.o
-	$(LD) $(LDFLAGS) start.o PrintString.o -o PrintString.coff
-	../bin/coff2noff PrintString.coff PrintString
